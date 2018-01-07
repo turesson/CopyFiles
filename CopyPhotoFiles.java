@@ -33,13 +33,14 @@ public class CopyPhotoFiles {
 			String[] split = date.split("-");
 			
 			System.out.println(date);
-			File year = new File(outputDirectory, split[0] );
 			File outPutDirectory;
 			try {
-				outPutDirectory = new File(year, split[1]);
-			} catch(ArrayIndexOutOfBoundsException e) {
-				outPutDirectory = new File(year, "other");
-			}
+                            File year = new File(outputDirectory, split[0] );
+                            outPutDirectory = new File(year, split[1]);
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            outPutDirectory = new File(outputDirectory, split[0] );
+                         }
+			
 			//System.out.println(outPutDirectory);
 			outPutDirectory.mkdirs();
 			for (File file : entry.getValue()) {
@@ -75,18 +76,17 @@ public class CopyPhotoFiles {
 			String[] split = file.getName().split(" ");
 			String dirName = split[0];
 			//Handle 20130427_125118
-			String[] s = dirName.split("_");
-			if (s.length > 1) {
-				try {
-					dirName = s[0].substring(0, 4) + "-" + s[0].substring(4, 6) + "-" + s[0].substring(6, 8);
-					
-				} catch (StringIndexOutOfBoundsException e) {
-					dirName = "other-other";
-				}
-				
-			}
-			
-
+			String[] s = dirName.split("-");
+			if (s.length == 3) {
+                            try {
+                                dirName = s[0] + "-" + s[1] + "-" + s[2];
+                            } catch (StringIndexOutOfBoundsException e) {
+                                dirName = "other";
+                            }
+			} else {
+			    dirName = "other";
+                        }
+		
 			if (!fileMap.containsKey(dirName)) {
 				fileMap.put(dirName, new ArrayList<File>());
 			}
